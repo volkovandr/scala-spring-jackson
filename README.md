@@ -27,7 +27,7 @@ case class Person(
 
 `Gender` is an enumeration defined as
 
-```
+```scala
 object Gender extends Enumeration {
   type Gender = Value
   val MALE, FEMALE = Value
@@ -42,7 +42,7 @@ for every field. The fields need to be vars.
 
 Also you need a no-arguments constructor, implement it as follows:
 
-```
+```scala
 case class Person(@BeanProperty var name: String) {
     def this() = this("default name")
 }
@@ -53,13 +53,13 @@ compatibility module to Jackson ObjectMapper:
 
   Add this to the dependencies:
 
-  ```
+  ```groovy
   compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-scala_2.12', version: '2.9.8'
   ```
 
   Create a Jackson configuration class that will customize the ObjectMapper that Spring uses:
 
-  ```
+  ```scala
   @Configuration
   class JacksonConfiguration {
 
@@ -86,7 +86,7 @@ you get
 ```json
 gender": {
   "enumClass": "org.example.model.Person$Gender",
-  "value": "FEMALE"
+  "value": "MALE"
 }
 ```
 
