@@ -1,5 +1,8 @@
 package org.example.model
 
+import java.util
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import org.example.model.Person.{Face, Gender}
 
 import scala.beans.BeanProperty
@@ -10,9 +13,11 @@ case class Person(
                    @BeanProperty var age: Int,
                    @BeanProperty var hobbies: List[String],
                    @BeanProperty
+                   @JsonDeserialize(using = classOf[org.example.configuration.JacksonConfiguration.GenderJsonDeserializer])
                    var gender: Gender.Gender,
 
                    @BeanProperty
+                   @JsonDeserialize(using = classOf[org.example.configuration.JacksonConfiguration.FaceJsonDeserializer])
                    var face: Face.Face,
 
                  ) {
@@ -21,12 +26,20 @@ case class Person(
 
 object Person {
 
-  object Gender extends Enumeration {
+  trait GenderEnum {
+    this: scala.Enumeration =>
+  }
+
+  object Gender extends Enumeration with GenderEnum {
     type Gender = Value
     val MALE, FEMALE = Value
   }
 
-  object Face extends Enumeration {
+  trait FaceEnum {
+    this: scala.Enumeration =>
+  }
+
+  object Face extends Enumeration with FaceEnum {
     type Face = Value
     val BIG_FACE, SMALL_FACE = Value
   }

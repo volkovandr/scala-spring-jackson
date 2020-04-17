@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.example.configuration.JacksonConfiguration.{FaceJsonDeserializer, FaceJsonSerializer, GenderJsonDeserializer, GenderJsonSerializer}
 import org.example.model.Person.Face.Face
-import org.example.model.Person.{Face, Gender}
+import org.example.model.Person.{Face, FaceEnum, Gender}
 import org.example.model.Person.Gender.Gender
 import org.springframework.context.annotation.{Bean, Configuration}
 
@@ -26,7 +26,7 @@ class JacksonConfiguration {
 
     val faceSerializerModule = new SimpleModule()
     faceSerializerModule.addSerializer(new FaceJsonSerializer())
-    faceSerializerModule.addDeserializer(classOf[Face.Face], new FaceJsonDeserializer())
+    faceSerializerModule.addDeserializer(classOf[Face], new FaceJsonDeserializer())
     objectMapper.registerModule(faceSerializerModule)
 
     objectMapper
@@ -52,17 +52,17 @@ object JacksonConfiguration {
   }
 
 
-  class FaceJsonSerializer extends StdSerializer[Face.Face](classOf[Face.Face]) {
+  class FaceJsonSerializer extends StdSerializer[Face](classOf[Face]) {
 
-    def this(t: Face.type) = this()
+    def this(t: Class[FaceEnum]) = this()
 
     override def serialize(value: Face, gen: JsonGenerator, provider: SerializerProvider): Unit =
       gen.writeString(value.toString)
   }
 
-  class FaceJsonDeserializer extends StdDeserializer[Face.Face](classOf[Face.Face]) {
+  class FaceJsonDeserializer extends StdDeserializer[Face](classOf[Face]) {
 
-    def this(t: Face.type) = this()
+    def this(t: Class[FaceEnum]) = this()
 
     override def deserialize(p: JsonParser, ctxt: DeserializationContext): Face =
       Face.withName(p.getCodec.readTree(p).asInstanceOf[JsonNode].asText())
