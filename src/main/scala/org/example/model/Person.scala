@@ -12,6 +12,7 @@ case class Person(
                    @BeanProperty var name: String,
                    @BeanProperty var age: Int,
                    @BeanProperty var hobbies: List[String],
+
                    @BeanProperty
                    @JsonDeserialize(using = classOf[org.example.configuration.JacksonConfiguration.GenderJsonDeserializer])
                    var gender: Gender.Gender,
